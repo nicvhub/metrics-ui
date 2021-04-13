@@ -1,22 +1,38 @@
-import logo from './logo.svg';
-import './App.css';
+import axios from "axios";
+import "./App.css";
+
+const apiClient = axios.create({
+  baseURL: "http://localhost/",
+  withCredentials: true,
+});
 
 function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
+        <input id="username"></input>
+        <input id="password"></input>
+        <button
+          onClick={() => {
+            apiClient
+              .get("/sanctum/csrf-cookie")
+              .then((response) => {
+                apiClient
+                  .post("/signin", {
+                    email: "nicolasvenegasparker@gmail.com",
+                    password: "whiskers2012",
+                  })
+                  .then(function (response) {
+                    console.log(response);
+                  })
+                  .catch(function (error) {
+                    console.log(error);
+                  });
+              });
+          }}
         >
-          Learn React
-        </a>
+          login
+        </button>
       </header>
     </div>
   );
