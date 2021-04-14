@@ -1,4 +1,5 @@
 import axios from "axios";
+import { useState } from "react";
 import "./App.css";
 
 const apiClient = axios.create({
@@ -7,28 +8,42 @@ const apiClient = axios.create({
 });
 
 function App() {
+  const [email, setEmail] = useState();
+  const [password, setPassword] = useState();
+
   return (
     <div className="App">
       <header className="App-header">
-        <input id="username"></input>
-        <input id="password"></input>
+        <input
+          id="email"
+          value={email}
+          onChange={(e) => {
+            setEmail(e.target.value);
+          }}
+        />
+        <input
+          id="password"
+          value={password}
+          type="password"
+          onChange={(e) => {
+            setPassword(e.target.value);
+          }}
+        />
         <button
           onClick={() => {
-            apiClient
-              .get("/sanctum/csrf-cookie")
-              .then((response) => {
-                apiClient
-                  .post("/signin", {
-                    email: "nicolasvenegasparker@gmail.com",
-                    password: "whiskers2012",
-                  })
-                  .then(function (response) {
-                    console.log(response);
-                  })
-                  .catch(function (error) {
-                    console.log(error);
-                  });
-              });
+            apiClient.get("/sanctum/csrf-cookie").then((response) => {
+              apiClient
+                .post("/signin", {
+                  email: email,
+                  password: password,
+                })
+                .then(function (response) {
+                  console.log(response);
+                })
+                .catch(function (error) {
+                  console.log(error);
+                });
+            });
           }}
         >
           login
