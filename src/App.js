@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "./App.css";
 
 const apiClient = axios.create({
@@ -8,12 +8,32 @@ const apiClient = axios.create({
 });
 
 function App() {
+  const [loggedIn, setLoggedIn] = useState(false);
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
+  useEffect(() => {
+    apiClient
+      .get("/signin")
+      .then(function (response) {
+        if (response.status === 204) {
+          setLoggedIn(true);
+        } else {
+          setLoggedIn(false);
+        }
+      })
+      .catch(function (error) {
+        setLoggedIn(false);
+      });
+  }, []);
+
+  const login = () => {
+    setLoggedIn(true);
+  };
 
   return (
     <div className="App">
       <header className="App-header">
+        {loggedIn ? <h1>LOGGED IN</h1> : <h1>NOT LOGGED IN</h1>}
         <input
           id="email"
           value={email}
@@ -38,7 +58,9 @@ function App() {
                   password: password,
                 })
                 .then(function (response) {
-                  console.log(response);
+                  if (response.status === 204) {
+                    login();
+                  }
                 })
                 .catch(function (error) {
                   console.log(error);
