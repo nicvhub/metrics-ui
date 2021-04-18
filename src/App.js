@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import "./App.css";
 
 const apiClient = axios.create({
-  baseURL: "https://nameless-thicket-31094.herokuapp.com/",
+  baseURL: "https://nameless-thicket-31094.herokuapp.com",
   withCredentials: true,
 });
 
